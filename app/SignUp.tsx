@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { useColorScheme } from "@/hooks/use-color-scheme";
@@ -8,13 +9,13 @@ import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
     ActivityIndicator,
-    Alert,
     KeyboardAvoidingView,
     Platform,
     StyleSheet,
     TextInput,
     TouchableOpacity,
 } from "react-native";
+import Toast from "react-native-toast-message";
 
 interface FormData {
   fullName: string;
@@ -41,24 +42,40 @@ export default function SignUp() {
 
   const handleSignUp = async (): Promise<void> => {
     if (!formData.fullName || !formData.email || !formData.passwordHash) {
-      Alert.alert("Error", "Completa todos los campos");
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Make sure to fill in every field",
+      });
       return;
     }
 
     if (formData.passwordHash !== confirmPassword) {
-      Alert.alert("Error", "Las contraseñas no coinciden");
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: "Passwords do not match. Please try again",
+      });
       return;
     }
 
     try {
       setIsLoading(true);
       await authService.signUp(formData);
-      Alert.alert("Éxito", "Usuario creado");
+      Toast.show({
+        type: "success",
+        text1: "Success",
+        text2: "User created succesfully",
+      });
       router.push("/login");
     } catch (error) {
       const message =
         error instanceof Error ? error.message : "Error desconocido";
-      Alert.alert("Error", message);
+      Toast.show({
+        type: "error",
+        text1: "Error",
+        text2: message,
+      });
     } finally {
       setIsLoading(false);
     }
