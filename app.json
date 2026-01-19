@@ -4,7 +4,7 @@
     "slug": "Scandra-frontend",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/ScandraLogo2.png",
     "scheme": "scandrafrontend",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
