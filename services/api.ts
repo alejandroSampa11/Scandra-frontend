@@ -22,8 +22,20 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    const message = error.response?.data?.message || "Error de conexión";
-    return Promise.reject(new Error(message));
+    if (error.response) {
+      // El servidor respondió con un código de error
+      const message =
+        error.response?.data?.message ||
+        error.response?.data?.error ||
+        `Error: ${error.response.status}`;
+      return Promise.reject(new Error(message));
+    } else if (error.request) {
+      // La petición se hizo pero no hubo respuesta
+      return Promise.reject(new Error("No response from server"));
+    } else {
+      // Algo pasó al configurar la petición
+      return Promise.reject(new Error(error.message || "Connection error"));
+    }
   },
 );
 

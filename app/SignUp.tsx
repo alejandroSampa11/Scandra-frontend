@@ -3,28 +3,23 @@ import { ThemedText } from "@/components/themed-text";
 import { ThemedView } from "@/components/themed-view";
 import { useColorScheme } from "@/hooks/use-color-scheme";
 import { authService } from "@/services/auth.service";
+import { SignUpData } from "@/types/auth.types";
+import { showToast } from "@/utils/toast";
 import { Image } from "expo-image";
 import { LinearGradient } from "expo-linear-gradient";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
-    ActivityIndicator,
-    KeyboardAvoidingView,
-    Platform,
-    StyleSheet,
-    TextInput,
-    TouchableOpacity,
+  ActivityIndicator,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  TextInput,
+  TouchableOpacity,
 } from "react-native";
-import Toast from "react-native-toast-message";
-
-interface FormData {
-  fullName: string;
-  email: string;
-  passwordHash: string;
-}
 
 export default function SignUp() {
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<SignUpData>({
     fullName: "",
     email: "",
     passwordHash: "",
@@ -36,46 +31,29 @@ export default function SignUp() {
 
   const isDark = colorScheme === "dark";
 
-  const handleChange = (field: keyof FormData, value: string) => {
+  const handleChange = (field: keyof SignUpData, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleSignUp = async (): Promise<void> => {
     if (!formData.fullName || !formData.email || !formData.passwordHash) {
-      Toast.show({
-        type: "error",
-        text1: "Error",
-        text2: "Make sure to fill in every field",
-      });
+      showToast.error("Make sure to fill in every field");
       return;
     }
 
     if (formData.passwordHash !== confirmPassword) {
-      Toast.show({
-        type: "error",
-        text1: "Error",
-        text2: "Passwords do not match. Please try again",
-      });
+      showToast.error("Passwords do not match. Please try again");
       return;
     }
 
     try {
       setIsLoading(true);
       await authService.signUp(formData);
-      Toast.show({
-        type: "success",
-        text1: "Success",
-        text2: "User created succesfully",
-      });
+      showToast.success("User created succesfully");
       router.push("/login");
     } catch (error) {
-      const message =
-        error instanceof Error ? error.message : "Error desconocido";
-      Toast.show({
-        type: "error",
-        text1: "Error",
-        text2: message,
-      });
+      const message = error instanceof Error ? error.message : "Error desconocido";
+      showToast.error(message);
     } finally {
       setIsLoading(false);
     }
