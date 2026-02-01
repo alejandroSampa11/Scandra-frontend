@@ -2,11 +2,10 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { StyleSheet } from 'react-native';
 
-
-export default function HomeScreen() {
+export default function SearchScreen() {
   return (
     <ThemedView style={styles.container}>
-      <ThemedText>hola</ThemedText>
+      <ThemedText style={styles.title}>Search</ThemedText>
     </ThemedView>
   );
 }
@@ -16,5 +15,9 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
   },
 });
