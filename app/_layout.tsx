@@ -91,7 +91,10 @@ export default function RootLayout() {
           options={{ presentation: "modal", title: "Modal" }}
         />
       </Stack>
-      <StatusBar style="auto" />
+      <StatusBar 
+        style={colorScheme === "dark" ? "light" : "dark"} 
+        backgroundColor={colorScheme === "dark" ? "#1a1a1a" : "#ffffff"}
+      />
       <Toast config={toastConfig} />
     </ThemeProvider>
   );
